@@ -1,0 +1,10 @@
+Change-Id: I2d1dea57d19225a7281f1aecf055d15b21be3d6a
+Code-Review+2: Tracy Graydon <tracy.graydon@intel.com>
+Verified+1: Tracy Graydon <tracy.graydon@intel.com>
+Code-Review+2: Kevron Rees <kevron.m.rees@intel.com>
+Verified+1: Kevron Rees <kevron.m.rees@intel.com>
+Submitted-by: Kevron Rees <kevron.m.rees@intel.com>
+Submitted-at: Tue, 11 Dec 2012 07:18:25 +0900
+Reviewed-on: http://review.tizen.org/gerrit/2551
+Project: profile/ivi/automotive-message-broker
+Branch: refs/heads/2.0alpha
