@@ -1,0 +1,8 @@
+Change-Id: I45e5d743cd5264a2ae8c5e02f5e45ade56322fce
+Code-Review+2: Kevron Rees <kevron.m.rees@intel.com>
+Verified+1: Kevron Rees <kevron.m.rees@intel.com>
+Submitted-by: Kevron Rees <kevron.m.rees@intel.com>
+Submitted-at: Thu, 07 Feb 2013 06:43:13 +0900
+Reviewed-on: http://review.tizen.org/gerrit/2724
+Project: profile/ivi/automotive-message-broker
+Branch: refs/heads/2.0alpha
