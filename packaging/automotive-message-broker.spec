@@ -2,8 +2,8 @@ Name:       automotive-message-broker
 Summary:    Automotive Message Broker is a vehicle network abstraction system.
 Version:    0.8.9
 Release:    1
-Group:      System Environment/Daemons
-License:    LGPL v2.1
+Group:      System/Base
+License:    LGPL-2.1
 URL:        https://github.com/otcshare/automotive-message-broker
 Source0:    %{name}-%{version}.tar.bz2
 Source100: ambd
@@ -48,7 +48,7 @@ Document files that describe the D-Bus API exposed by automotive-message-broker
 
 %package plugins
 Summary:    Various plugins for automotive-message-broker
-Group:      System Environment/Daemons
+Group:      System/Base
 Requires:   %{name} = %{version}-%{release}
 
 %description plugins
@@ -56,7 +56,7 @@ Collection of plugins for automotive-message-broker.  Contains example, demo and
 
 %package plugins-obd2
 Summary:    OBD-II plugin
-Group:      System Environment/Daemons
+Group:      System/Base
 Requires:   %{name} = %{version}-%{release}
 
 %description plugins-obd2
@@ -64,7 +64,7 @@ OBD-II plugin that uses ELM 327-compatible scantools to access vehicle data
 
 %package plugins-websocket
 Summary:    websocket source and sink plugins
-Group:      System Environment/Daemons
+Group:      System/Base
 Requires:   %{name} = %{version}-%{release}
 Requires:   libwebsockets
 
@@ -73,7 +73,7 @@ websocket source and sink plugins
 
 %package plugins-wheel
 Summary:    source plugin for using the Logitech G27 racing wheel                                        
-Group:      System Environment/Daemons
+Group:      System/Base
 Requires:   %{name} = %{version}-%{release}
 Requires:   libwebsockets
 
@@ -82,7 +82,7 @@ source plugin for using the Logitech G27 racing wheel
 
 %package plugins-database
 Summary:    Database logging plugin for automotive-message-broker
-Group:      System Environment/Daemons  
+Group:      System/Base  
 Requires:   %{name} = %{version}-%{release}
 Requires:  sqlite
 
@@ -91,7 +91,7 @@ Database logging plugin for automotive-message-broker
 
 %package plugins-opencvlux
 Summary:    Plugin for simulating ExteriorBrightness using a common webcam
-Group:      System Environment/Daemons
+Group:      System/Base
 Requires:   %{name} = %{version}-%{release}
 Requires:   opencv
 
@@ -128,17 +128,8 @@ make %{?jobs:-j%jobs}
 rm -rf %{buildroot}
 %make_install
 
-mkdir -p %{buildroot}%{_libdir}/systemd/system/network.target.wants
-ln -s ../ambd.service %{buildroot}%{_libdir}/systemd/system/network.target.wants/ambd.service
-
-#hack because systemd isn't in the image:
-
-mkdir -p %{buildroot}/etc/rc.d/init.d
-install -m 755 %{SOURCE100}  %{buildroot}/etc/rc.d/init.d/ambd
-mkdir -p %{buildroot}/etc/rc.d/rc3.d
-ln -s ../init.d/ambd %{buildroot}/etc/rc.d/rc3.d/S62ambd
-mkdir -p %{buildroot}/etc/rc.d/rc5.d
-ln -s ../init.d/ambd %{buildroot}/etc/rc.d/rc5.d/S62ambd
+mkdir -p %{buildroot}%{_prefix}/lib/systemd/system/network.target.wants
+ln -s ../ambd.service %{buildroot}%{_prefix}/lib/systemd/system/network.target.wants/ambd.service
 
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
@@ -150,11 +141,8 @@ ln -s ../init.d/ambd %{buildroot}/etc/rc.d/rc5.d/S62ambd
 %defattr(-,root,root,-)
 %config %{_sysconfdir}/ambd/config
 %{_bindir}/*
-%{_sysconfdir}/rc.d/init.d/ambd
-%{_sysconfdir}/rc.d/rc3.d/S62ambd
-%{_sysconfdir}/rc.d/rc5.d/S62ambd
 %{_libdir}/libamb.so*
-%{_libdir}/systemd/system/*
+%{_prefix}/lib/systemd/system/*
 
 %files devel
 %defattr(-,root,root,-)
