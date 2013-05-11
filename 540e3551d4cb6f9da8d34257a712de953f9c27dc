@@ -1,0 +1,10 @@
+Change-Id: I540e3551d4cb6f9da8d34257a712de953f9c27dc
+Code-Review+1: Rusty Lynch <rusty.lynch@intel.com>
+Verified+1: Rusty Lynch <rusty.lynch@intel.com>
+Code-Review+2: Kevron Rees <kevron.m.rees@intel.com>
+Verified+1: Kevron Rees <kevron.m.rees@intel.com>
+Submitted-by: Kevron Rees <kevron.m.rees@intel.com>
+Submitted-at: Sat, 11 May 2013 15:39:47 -0700
+Reviewed-on: https://review.tizen.org/gerrit/3517
+Project: profile/ivi/automotive-message-broker
+Branch: refs/heads/tizen
