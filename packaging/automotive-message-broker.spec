@@ -120,7 +120,7 @@ Plugin for integration with the gpsd gps daemon
 %setup -q -n %{name}-%{version}
 
 %build
-%cmake -Ddatabase_plugin=ON -Dopencvlux_plugin=ON -Dmurphy_plugin=ON -Dwebsocket_plugin=ON -Dobd_plugin=ON -Dgpsd_plugin=ON
+%cmake -Ddatabase_plugin=ON -Dopencvlux_plugin=ON -Dmurphy_plugin=ON -Dwebsocket_plugin=ON -Dobd_plugin=ON 
 
 make %{?jobs:-j%jobs}
 
@@ -195,9 +195,9 @@ ln -s ../init.d/ambd %{buildroot}/etc/rc.d/rc5.d/S62ambd
 %defattr(-,root,root,-)
 %{_libdir}/%{name}/murphysourceplugin.so
 
-%files plugins-gpsd
-%defattr(-,root,root,-)
-%{_libdir}/%{name}/gpsdplugin.so
+#%files plugins-gpsd
+#%defattr(-,root,root,-)
+#%{_libdir}/%{name}/gpsdplugin.so
 
 %files doc
 %defattr(-,root,root,-)
