@@ -189,4 +189,4 @@ ln -s ../ambd.service %{buildroot}%{_prefix}/lib/systemd/system/network.target.w
 
 %files doc
 %defattr(-,root,root,-)
-%doc %{_docdir}/%{name}/*.txt
+%doc %{_docdir}/packages/%{name}/*.txt
