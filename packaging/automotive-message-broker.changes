@@ -1,3 +1,7 @@
+* Tue May 21 11:19:00 PST 2013 - <kevron.m.rees@intel.com>
+- Updated to latest upstream on the 0.9 branch
+- disabled gpsd plugin since we don't have a modern version of gpsd on tizen
+
 * Thu Mar 21 16:02:00 PST 2013 - <kevron.m.rees@intel.com>
 - Fix for performance issues in opencvlux plugin
 - Murphy code added but not built by default yet

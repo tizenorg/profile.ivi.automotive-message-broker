@@ -24,7 +24,6 @@ BuildRequires:  opencv-devel
 BuildRequires:  murphy-devel
 BuildRequires:  pkgconfig(murphy-glib)
 BuildRequires:  dbus-devel
-BuildRequires:  libgps-devel
 
 %description
 Automotive Message Broker is a vehicle network abstraction system.
@@ -107,14 +106,14 @@ Requires:  murphy
 %description plugins-murphy
 Plugin for integration with the murphy policy system
 
-%package plugins-gpsd
-Summary:   Plugin for integration with the gpsd policy system
-Group:     System Environment/Daemons
-Requires:  %{name} = %{version}-%{release}
-Requires:  gpsd
+#%package plugins-gpsd
+#Summary:   Plugin for integration with the gpsd policy system
+#Group:     System Environment/Daemons
+#Requires:  %{name} = %{version}-%{release}
+#Requires:  gpsd
 
-%description plugins-gpsd
-Plugin for integration with the gpsd gps daemon
+#%description plugins-gpsd
+#Plugin for integration with the gpsd gps daemon
 
 %prep
 %setup -q -n %{name}-%{version}
