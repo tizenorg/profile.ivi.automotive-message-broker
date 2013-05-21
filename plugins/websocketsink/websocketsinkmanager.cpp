@@ -199,43 +199,25 @@ void WebSocketSinkManager::addSingleShotRangedSink(libwebsocket* socket, Vehicle
 	rangedRequest.sequenceBegin = seqstart;
 	rangedRequest.sequenceEnd = seqend;
 
-	if (property == "running_status_speedometer")
+	PropertyList foo = VehicleProperty::capabilities();
+	if (ListPlusPlus<VehicleProperty::Property>(&foo).contains(property))
 	{
-		rangedRequest.property = VehicleProperty::VehicleSpeed;
-	}
-	else if (property == "running_status_engine_speed")
-	{
-		rangedRequest.property = VehicleProperty::EngineSpeed;
-	}
-	else if (property == "running_status_steering_wheel_angle")
-	{
-		rangedRequest.property = VehicleProperty::SteeringWheelAngle;
-	}
-	else if (property == "running_status_transmission_gear_status")
-	{
-		rangedRequest.property = VehicleProperty::TransmissionShiftPosition;
+		rangedRequest.property = property;
 	}
 	else
 	{
-		PropertyList foo = VehicleProperty::capabilities();
-		if (ListPlusPlus<VehicleProperty::Property>(&foo).contains(property))
-		{
-			rangedRequest.property = property;
-		}
-		else
-		{
-			DebugOut(0)<<"websocketsink: Invalid property requested: "<<property;
-			return;
-		}
-
+		DebugOut(0)<<"websocketsink: Invalid property requested: "<<property;
+		return;
 	}
+
 	rangedRequest.completed = [socket,id](AsyncRangePropertyReply* reply)
 	{
 		stringstream s;
 
 		//TODO: Dirty hack hardcoded stuff, jsut to make it work.
-		stringstream data ("[");
-		//data << "{ \"property
+		stringstream data;
+		data.precision(15);
+		data<< "[";
 		std::list<AbstractPropertyType*> values = reply->values;
 		for(auto itr = values.begin(); itr != values.end(); itr++)
 		{
@@ -249,7 +231,7 @@ void WebSocketSinkManager::addSingleShotRangedSink(libwebsocket* socket, Vehicle
 
 		data<<"]";
 
-		s << "{\"type\":\"methodReply\",\"name\":\"getRanged\",\"data\":"<<data<<",\"transactionid\":\"" << id << "\"}";
+		s << "{\"type\":\"methodReply\",\"name\":\"getRanged\",\"data\":"<<data.str()<<",\"transactionid\":\"" << id << "\"}";
 
 		string replystr = s.str();
 		//printf("Reply: %s\n",replystr.c_str());
@@ -496,25 +478,32 @@ static int websocket_callback(struct libwebsocket_context *context,struct libweb
 			//TODO: Verify that ALL requests get sent via LWS_CALLBACK_HTTP, so we can use that instead of LWS_CALLBACK_RECIEVE
 			//TODO: Do we want exceptions, or just to return an invalid json reply? Probably an invalid json reply.
 			DebugOut() << __SMALLFILE__ << ":" << __LINE__ << " Requested: " << (char*)in << "\n";
-			GError* error = nullptr;
 
+			std::string tempInput((char*)in);
 
 			json_object *rootobject;
 			json_tokener *tokener = json_tokener_new();
 			enum json_tokener_error err;
 			do
 			{
-				rootobject = json_tokener_parse_ex(tokener, (char*)in,len);
+				rootobject = json_tokener_parse_ex(tokener, tempInput.c_str(),len);
 			} while ((err = json_tokener_get_error(tokener)) == json_tokener_continue);
 			if (err != json_tokener_success)
 			{
 				fprintf(stderr, "Error: %s\n", json_tokener_error_desc(err));
+				throw std::runtime_error("JSON Parsing error");
 				// Handle errors, as appropriate for your application.
 			}
+			if(!rootobject)
+			{
+				DebugOut(0)<<"failed to parse json: "<<tempInput<<endl;
+			}
+
 			if (tokener->char_offset < len) // XXX shouldn't access internal fields
 			{
 				// Handle extra characters after parsed object as desired.
 				// e.g. issue an error, parse another object from that point, etc...
+
 			}
 			// Success, use jobj here.
 			json_object *typeobject = json_object_object_get(rootobject,"type");
@@ -778,20 +767,23 @@ static int websocket_callback(struct libwebsocket_context *context,struct libweb
 	return 0; 
 }
 
-bool gioPollingFunc(GIOChannel *source,GIOCondition condition,gpointer data)
+bool gioPollingFunc(GIOChannel *source, GIOCondition condition,gpointer data)
 {
 	DebugOut(5) << "Polling..." << condition << endl;
-	if (condition != G_IO_IN)
+
+	if(condition & G_IO_ERR)
 	{
-		//Don't need to do anything
-		if (condition == G_IO_HUP)
-		{
-			//Hang up. Returning false closes out the GIOChannel.
-			//printf("Callback on G_IO_HUP\n");
-			return false;
-		}
-		return true;
+		DebugOut(0)<< __SMALLFILE__ <<":"<< __LINE__ <<" websocketsink polling error."<<endl;
 	}
+
+	if (condition & G_IO_HUP)
+	{
+		//Hang up. Returning false closes out the GIOChannel.
+		//printf("Callback on G_IO_HUP\n");
+		DebugOut(0)<<"socket hangup event..."<<endl;
+		return false;
+	}
+
 	//This is the polling function. If it return false, glib will stop polling this FD.
 	//printf("Polling...%i\n",condition);
 	
@@ -802,5 +794,6 @@ bool gioPollingFunc(GIOChannel *source,GIOCondition condition,gpointer data)
 	pollstruct.events = condition;
 	pollstruct.revents = condition;
 	libwebsocket_service_fd(context,&pollstruct);
+
 	return true;
 }
