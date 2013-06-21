@@ -1,0 +1,8 @@
+Change-Id: If56dae54d21a4400058882d118d713adbdaeab44
+Code-Review+2: Tracy Graydon <tracy.graydon@intel.com>
+Verified+1: Tracy Graydon <tracy.graydon@intel.com>
+Submitted-by: Tracy Graydon <tracy.graydon@intel.com>
+Submitted-at: Fri, 21 Jun 2013 14:15:44 -0700
+Reviewed-on: https://review.tizen.org/gerrit/4171
+Project: profile/ivi/automotive-message-broker
+Branch: refs/heads/tizen
