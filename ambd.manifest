@@ -1,0 +1,11 @@
+<manifest>
+  <define>
+     <domain name="AMB" />
+     <provide>
+       <label name=”AMB::machinegun” />
+     </provide>
+  </define> 
+  <request>
+    <domain name="_" />
+  </request>
+</manifest>
