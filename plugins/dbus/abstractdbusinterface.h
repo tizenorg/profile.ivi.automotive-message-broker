@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <gio/gio.h>
 #include <boost/any.hpp>
 #include <nullptr.h>
+#include <abstractroutingengine.h>
 
 class AbstractProperty;
 
@@ -63,7 +64,11 @@ public:
 
 	bool isSupported() { return supported; }
 
+	std::list<string> getAmbProperties();
+
 	double time() { return mTime; }
+
+	AbstractRoutingEngine* re;
 
 protected:
 

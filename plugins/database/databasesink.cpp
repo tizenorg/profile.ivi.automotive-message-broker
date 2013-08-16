@@ -439,7 +439,17 @@ void DatabaseSink::getRangePropertyAsync(AsyncRangePropertyReply *reply)
 	ostringstream query;
 	query.precision(15);
 
-	query<<"SELECT * from "<<tablename<<" WHERE key='"<<reply->property<<"' AND";
+	query<<"SELECT * from "<<tablename<<" WHERE (";
+
+	for(auto itr = reply->properties.begin(); itr != reply->properties.end(); itr++)
+	{
+		if(itr != reply->properties.begin())
+			query<<" OR ";
+
+		query<<"key='"<<(*itr)<<"'";
+	}
+
+	query<<") AND";
 
 	if(reply->timeBegin && reply->timeEnd)
 	{
@@ -453,7 +463,7 @@ void DatabaseSink::getRangePropertyAsync(AsyncRangePropertyReply *reply)
 
 	std::vector<std::vector<string>> data = db->select(query.str());
 
-	std::list<AbstractPropertyType*> cleanup;
+	DebugOut()<<"Dataset size "<<data.size()<<endl;
 
 	for(auto i=0;i<data.size();i++)
 	{
@@ -474,7 +484,6 @@ void DatabaseSink::getRangePropertyAsync(AsyncRangePropertyReply *reply)
 			property->sequence = dbobj.sequence;
 
 			reply->values.push_back(property);
-			cleanup.push_back(property);
 		}
 	}
 
