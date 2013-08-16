@@ -2,7 +2,7 @@
   <define>
      <domain name="AMB" />
      <provide>
-       <label name=”AMB::machinegun” />
+       <label name="AMB::machinegun" />
      </provide>
   </define> 
   <request>
