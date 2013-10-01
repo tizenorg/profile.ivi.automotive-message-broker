@@ -121,7 +121,7 @@ Plugin for integration with the murphy policy system
 Summary:   Plugin that provides gps data from nmea devices
 Group:     Automotive/Libraries
 Requires:  %{name} = %{version}-%{release}
-Requres: boost-regex
+Requires: boost-regex
 
 %description plugins-gpsnmea
 Plugin that provides location data from nmea devices including bluetooth
