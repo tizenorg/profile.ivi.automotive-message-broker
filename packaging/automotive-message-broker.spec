@@ -1,12 +1,11 @@
 Name:       automotive-message-broker
 Summary:    Automotive Message Broker is a vehicle network abstraction system
-Version:    0.10
+Version:    0.10.800
 Release:    1
 Group:      Automotive/Service
 License:    LGPL-2.1
 URL:        https://github.com/otcshare/automotive-message-broker
 Source0:    %{name}-%{version}.tar.bz2
-Source100: ambd
 Requires: automotive-message-broker-plugins
 Requires: automotive-message-broker-plugins-murphy
 Requires(post): /sbin/ldconfig
@@ -56,10 +55,19 @@ Requires:   %{name} = %{version}-%{release}
 %description plugins
 Collection of plugins for automotive-message-broker.  Contains example, demo and dbus plugins.
 
+%package plugins-common
+Summary:  Common plugin library
+Group:    Automotive/Libraries
+Requires: %{name} = %{version}-%{release}
+
+%description plugins-common
+library containing a kitchen-sink of common utility functions
+
 %package plugins-obd2
 Summary:    OBD-II plugin
 Group:      Automotive/Libraries
 Requires:   %{name} = %{version}-%{release}
+Requires:   %{name}-plugins-common = %{version}-%{release}
 
 %description plugins-obd2
 OBD-II plugin that uses ELM 327-compatible scantools to access vehicle data
@@ -109,20 +117,20 @@ Requires:  murphy
 %description plugins-murphy
 Plugin for integration with the murphy policy system
 
-#%package plugins-gpsd
-#Summary:   Plugin for integration with the gpsd policy system
-#Group:     Automotive/Libraries
-#Requires:  %{name} = %{version}-%{release}
-#Requires:  gpsd
+%package plugins-gpsnmea
+Summary:   Plugin that provides gps data from nmea devices
+Group:     Automotive/Libraries
+Requires:  %{name} = %{version}-%{release}
+Requres: boost-regex
 
-#%description plugins-gpsd
-#Plugin for integration with the gpsd gps daemon
+%description plugins-gpsnmea
+Plugin that provides location data from nmea devices including bluetooth
 
 %prep
 %setup -q -n %{name}-%{version}
 
 %build
-%cmake -Ddatabase_plugin=ON -Dopencvlux_plugin=ON -Dmurphy_plugin=ON -Dwebsocket_plugin=ON -Dobd2_plugin=ON -Dtest_plugin=OFF
+%cmake -Ddatabase_plugin=ON -Dopencvlux_plugin=ON -Dmurphy_plugin=ON -Dwebsocket_plugin=ON -Dobd2_plugin=ON -Dtest_plugin=OFF -Dgpsnmea_plugin=ON
 
 make %{?jobs:-j%jobs}
 
@@ -165,6 +173,10 @@ ln -s ../ambd.service %{buildroot}%{_prefix}/lib/systemd/system/network.target.w
 %{_libdir}/%{name}/demosinkplugin.so
 /etc/dbus-1/system.d/amb.conf
 
+%files plugins-common
+%defattr(-,root,root,-)
+%{_libdir}/libamb-plugins-common.so
+
 %files plugins-wheel
 %defattr(-,root,root,-)
 %{_libdir}/%{name}/wheelsourceplugin.so
@@ -190,9 +202,9 @@ ln -s ../ambd.service %{buildroot}%{_prefix}/lib/systemd/system/network.target.w
 %defattr(-,root,root,-)
 %{_libdir}/%{name}/murphysourceplugin.so
 
-#%files plugins-gpsd
-#%defattr(-,root,root,-)
-#%{_libdir}/%{name}/gpsdplugin.so
+%files plugins-gpsnmea
+%defattr(-,root,root,-)
+%{_libdir}/%{name}/gpsnmea.so
 
 %files doc
 %defattr(-,root,root,-)
