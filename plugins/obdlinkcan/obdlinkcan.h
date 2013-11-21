@@ -16,24 +16,19 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef GPSNMEAPLUGIN_H
-#define GPSNMEAPLUGIN_H
+#ifndef ObdLinkCANPLUGIN_H
+#define ObdLinkCANPLUGIN_H
 
 #include <abstractsource.h>
 #include <string>
 
-#include "abstractio.hpp"
-
 using namespace std;
 
-class Location;
-
-class GpsNmeaSource: public AbstractSource
+class ObdLinkCAN: public AbstractSource
 {
 
 public:
-	GpsNmeaSource(AbstractRoutingEngine* re, map<string, string> config);
-	~GpsNmeaSource();
+	ObdLinkCAN(AbstractRoutingEngine* re, map<string, string> config);
 	
 	const string uuid();
 	void getPropertyAsync(AsyncPropertyReply *reply);
@@ -47,6 +42,8 @@ public:
 	
 	void supportedChanged(PropertyList) {}
 	
+	void randomizeProperties();
+
 	PropertyInfo getPropertyInfo(VehicleProperty::Property property)
 	{
 		if(propertyInfoMap.find(property) != propertyInfoMap.end())
@@ -54,26 +51,18 @@ public:
 
 		return PropertyInfo::invalid();
 	}
-
-	void canHasData();
 	
 private:
 
 	void addPropertySupport(VehicleProperty::Property property, Zone::Type zone);
 
-	bool checksum(string sentence);
-
 	std::map<VehicleProperty::Property, PropertyInfo> propertyInfoMap;
-
+	std::map<Zone::Type, Airbag::Status> airbagStatus;
+	std::map<Zone::Type, bool> acStatus;
 	PropertyList mRequests;
 	PropertyList mSupported;
-
-	AbstractIo* device;
-	Location *location;
-
-	std::string mUuid;
-
-	std::string buffer;
+	uint16_t velocity;
+	uint16_t engineSpeed;
 };
 
-#endif // EXAMPLEPLUGIN_H
+#endif // ObdLinkCANPLUGIN_H
