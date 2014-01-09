@@ -1,7 +1,4 @@
-* Wed Jan  8 23:41:34 UTC 2014 - tracy.graydon@intel.com
-- Fix the date in the previous changelog entry to make OBS happy 
-
-* Wed Jan 08 2014 - <kevron.m.rees@intel.com>
+* Wed Jan 08 2013 - <kevron.m.rees@intel.com>
 - Upstream 0.10.902
 - Temporarily install rule-less manifest so security=none works
 
