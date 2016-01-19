@@ -274,6 +274,7 @@ WheelPrivate::WheelPrivate(WheelSourcePlugin *parent, AbstractRoutingEngine *rou
 				}
 		}
 	if (ioctl(fd, JSIOCSCORR, &cal) < 0) {
+		close(fd);
 		throw std::runtime_error("Could not set calibration data!");
 		return;
 	}
