@@ -363,6 +363,7 @@ void Vehicle::Get(const std::string& property, Zone::Type zone, double ret_id) {
 
 	if (error_ptr) {
 		DebugOut(DebugOut::Error) << "failed to get properties proxy: " << error->message << endl;
+		free(data);
 		return;
 	}
 
