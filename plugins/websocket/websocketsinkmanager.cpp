@@ -21,9 +21,9 @@
 #include "common.h"
 
 #include <sstream>
-#include <json/json.h>
-#include <json/json_object.h>
-#include <json/json_tokener.h>
+#include <json-c/json.h>
+#include <json-c/json_object.h>
+#include <json-c/json_tokener.h>
 #include <listplusplus.h>
 #include <memory>
 

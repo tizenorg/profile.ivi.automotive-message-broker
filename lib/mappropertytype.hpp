@@ -6,7 +6,7 @@
 
 #include <map>
 #include <debugout.h>
-#include <json/json.h>
+#include <json-c/json.h>
 
 template <class T, class N>
 class MapPropertyType: public AbstractPropertyType

@@ -1,5 +1,7 @@
 %bcond_without qt5
 
+%define enable_plugin_opencvlux OFF
+
 Name:       automotive-message-broker
 Summary:    Automotive Message Broker is a vehicle network abstraction system
 Version:    0.13
@@ -18,13 +20,15 @@ Requires: python-curses
 Requires: python-gobject
 BuildRequires:  cmake
 BuildRequires:  boost-devel
-BuildRequires:  pkgconfig(json)
+BuildRequires:  pkgconfig(json-c)
 BuildRequires:  libtool-ltdl-devel
 BuildRequires:  pkgconfig(libwebsockets)
 BuildRequires:  pkgconfig(uuid)
 BuildRequires:  pkgconfig(sqlite3)
 BuildRequires:  pkgconfig(glib-2.0)
+%if %{?enable_plugin_opencvlux} == ON
 BuildRequires:  pkgconfig(opencv)
+%endif
 BuildRequires:  murphy
 BuildRequires:  pkgconfig(murphy-glib)
 BuildRequires:  pkgconfig(dbus-1)
@@ -83,6 +87,7 @@ Requires:   qt5-qtcore
 %description plugins-websocket
 websocket source and sink plugins
 
+%if %{?enable_plugin_opencvlux} == ON
 %package plugins-opencvlux
 Summary:    Plugin for simulating ExteriorBrightness using a common webcam
 Group:      Automotive/Libraries
@@ -91,6 +96,7 @@ Requires:   opencv
 
 %description plugins-opencvlux
 Plugin for simulating ExteriorBrightness using a common webcam
+%endif
 
 %package plugins-bluetooth
 Summary:   Interface to AMB over bluetooth
@@ -224,7 +230,7 @@ Crosswalk vehicle API extension based on the W3C Automotive Business Group Vehic
 	   -DXWALK_EXTENSION_PATH=/tizen-extensions-crosswalk \
 %if %{with qt5}
 	   -Dqtmainloop=ON \
-	   -Dopencvlux_plugin=ON \
+	   -Dopencvlux_plugin=%{enable_plugin_opencvlux} \
 	   -Dwebsocket_plugin=ON \
 	   -Dbluetooth_plugin=ON \
 	   -Dbluemonkey_plugin=ON \
@@ -295,10 +301,12 @@ cp packaging/config.tizen %{buildroot}%{_sysconfdir}/ambd/
 %{_libdir}/%{name}/websocketsource.so
 %{_libdir}/%{name}/websocketsink.so
 
+%if %{?enable_plugin_opencvlux} == ON
 %files plugins-opencvlux
 %defattr(-,root,root,-)
 %manifest packaging.in/amb.manifest.plugins
 %{_libdir}/%{name}/opencvluxplugin.so
+%endif
 
 %files plugins-bluetooth
 %defattr(-,root,root,-)

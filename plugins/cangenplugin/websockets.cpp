@@ -17,9 +17,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 #include "websockets.h"
-#include <json/json.h>
-#include <json/json_object.h>
-#include <json/json_tokener.h>
+#include <json-c/json.h>
+#include <json-c/json_object.h>
+#include <json-c/json_tokener.h>
 #include <vehicleproperty.h>
 #include <listplusplus.h>
 
